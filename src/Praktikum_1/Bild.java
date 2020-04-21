@@ -1,3 +1,5 @@
+package Praktikum_1;
+
 import java.util.Objects;
 
 public class Bild extends Medium{
@@ -33,8 +35,8 @@ public class Bild extends Medium{
 		if(super.equals(obj))
 		{
 			
-			Bild bTemp;
-			bTemp = (Bild)obj;
+			Praktikum_1.Bild bTemp;
+			bTemp = (Praktikum_1.Bild)obj;
 			//Vergleich der Variablenwerte
 			if(this.hashCode()==bTemp.hashCode())
 				return true;

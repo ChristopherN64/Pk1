@@ -1,3 +1,5 @@
+package Praktikum_1;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -54,7 +56,7 @@ public abstract class Medium {
 		{
 			return true;
 		}
-		//Prüfen auf Nullrefferenz
+		//Prï¿½fen auf Nullrefferenz
 		else if(obj == null)
 		{
 			return false;

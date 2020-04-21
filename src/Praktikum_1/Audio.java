@@ -1,3 +1,5 @@
+package Praktikum_1;
+
 import java.util.Objects;
 
 public class Audio extends Medium {
@@ -33,8 +35,8 @@ public class Audio extends Medium {
 		if(super.equals(obj))
 		{
 			//Typenconvetierung
-			Audio aTemp;
-			aTemp = (Audio)obj;
+			Praktikum_1.Audio aTemp;
+			aTemp = (Praktikum_1.Audio)obj;
 			
 			//Vergleich der Variablenwerte
 			if(this.hashCode()==aTemp.hashCode())
