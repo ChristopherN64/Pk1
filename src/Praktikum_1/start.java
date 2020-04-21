@@ -3,7 +3,8 @@ package Praktikum_1;
 public class start {
 
 	public static void main(String[] args) {
-		
+
+		//Create Objects
 		Audio a = new Audio("it Means Nothing",2007,"Stereophonics",229);
 		Audio a2 = new Audio("it Means Nothing",2007,"Stereophonics",229);
 		Bild b = new Bild("Gebäude Fb Informatik",2019,"Dortmund");
