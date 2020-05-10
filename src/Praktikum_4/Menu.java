@@ -10,7 +10,7 @@ public class Menu {
     {
         this.mv = new Medienverwaltung();
     }
-    public void showMenu()
+    public void showMenu() throws Exception
     {
         boolean run=true;
         Scanner sc = new Scanner(System.in);
@@ -18,7 +18,7 @@ public class Menu {
         while(run) {
             System.out.print("\n\n\nMedienverwaltung \n\n1. Audio Aufnehemn\n2. Bild aufnehmen\n3. Zeige alle Medien\n4. Zeige neues Medium\n5. Berechne Durchschnittliches Erscheinungsjahr\n6. Beenden\n\nBitte Menupunkt wählen:");
             iWahl = sc.nextInt();
-
+            if(iWahl<1 || iWahl>6) throw new Exception("Fehler beiWahl");
                 switch (iWahl) {
                     //Audio Aufnehem
                     case 1:
@@ -83,16 +83,20 @@ public class Menu {
     public int getErscheinungsjahr() throws Exception
     {
         int iJahr=0;
-        String sInput =JOptionPane.showInputDialog("Jahr:");
-        if(sInput==null) throw new Exception("Abbruch");
-        try
+        while (true)
         {
-            iJahr = Integer.parseInt(sInput);
-        }
-        catch (NumberFormatException e)
-        {
-            JOptionPane.showMessageDialog(null,"Bitte gültiges Erscheinungsjahr angeben!");
-            throw new Exception("Abbruch");
+            try
+            {
+                String sInput =JOptionPane.showInputDialog("Jahr:");
+                if(sInput==null) throw new Exception("Abbruch");
+                iJahr = Integer.parseInt(sInput);
+                break;
+            }
+            catch (NumberFormatException e)
+            {
+                JOptionPane.showMessageDialog(null,"Bitte gültiges Erscheinungsjahr angeben!");
+
+            }
         }
         return iJahr;
     }
@@ -101,15 +105,18 @@ public class Menu {
     public int getDauer() throws Exception
     {
         int iDauer=0;
-        String sInput =JOptionPane.showInputDialog("Dauer");
-        if(sInput==null) throw new Exception("Abbruch");
-        try{
-            iDauer=Integer.parseInt(sInput);
-        }
-        catch (NumberFormatException e)
+        while(true)
         {
-            JOptionPane.showMessageDialog(null,"Bitte gültige Dauer angeben!");
-            throw new Exception("Abbruch");
+            try{
+                String sInput =JOptionPane.showInputDialog("Dauer");
+                if(sInput==null) throw new Exception("Abbruch");
+                iDauer=Integer.parseInt(sInput);
+                break;
+            }
+            catch (NumberFormatException e)
+            {
+                JOptionPane.showMessageDialog(null,"Bitte gültige Dauer angeben!");
+            }
         }
         return iDauer;
     }
