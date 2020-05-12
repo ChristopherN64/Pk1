@@ -56,9 +56,9 @@ public class Menu {
             iDauer=getDauer();
             mv.aufnehmen(new Audio(sTitel, iJahr, sInterpret, iDauer));
         }
-        catch (Exception e)
+        catch (CancelException e)
         {
-            if(e.getMessage().equals("Abbruch")) JOptionPane.showMessageDialog(null,"Die Medienaufnahne wurde abgebrochen!");
+            JOptionPane.showMessageDialog(null,"Die Medienaufnahne wurde abgebrochen!");
         }
     }
 
@@ -72,15 +72,15 @@ public class Menu {
             iJahr=getErscheinungsjahr();
             mv.aufnehmen(new Bild(sTitel, iJahr, sOrt));
         }
-        catch (Exception e)
+        catch (CancelException e)
         {
-            if(e.getMessage().equals("Abbruch")) JOptionPane.showMessageDialog(null,"Die Medienaufnahne wurde abgebrochen!");
+            JOptionPane.showMessageDialog(null,"Die Medienaufnahne wurde abgebrochen!");
         }
 
     }
 
 
-    public int getErscheinungsjahr() throws Exception
+    public int getErscheinungsjahr() throws CancelException
     {
         int iJahr=0;
         while (true)
@@ -88,7 +88,7 @@ public class Menu {
             try
             {
                 String sInput =JOptionPane.showInputDialog("Jahr:");
-                if(sInput==null) throw new Exception("Abbruch");
+                if(sInput==null) throw new CancelException();
                 iJahr = Integer.parseInt(sInput);
                 break;
             }
@@ -102,14 +102,14 @@ public class Menu {
     }
 
 
-    public int getDauer() throws Exception
+    public int getDauer() throws CancelException
     {
         int iDauer=0;
         while(true)
         {
             try{
                 String sInput =JOptionPane.showInputDialog("Dauer");
-                if(sInput==null) throw new Exception("Abbruch");
+                if(sInput==null) throw new CancelException();
                 iDauer=Integer.parseInt(sInput);
                 break;
             }
@@ -121,24 +121,24 @@ public class Menu {
         return iDauer;
     }
 
-    public String getTitel() throws Exception
+    public String getTitel() throws CancelException
     {
         String sTitel = JOptionPane.showInputDialog("Titel");
-        if(sTitel==null) throw new Exception("Abbruch");
+        if(sTitel==null) throw new CancelException();
         return sTitel;
     }
 
-    public  String getOrt() throws Exception
+    public  String getOrt() throws CancelException
     {
         String sOrt = JOptionPane.showInputDialog("Ort:");
-        if(sOrt==null) throw new Exception("Abbruch");
+        if(sOrt==null) throw new CancelException();
         return sOrt;
     }
 
-    public  String getInterpret() throws Exception
+    public  String getInterpret() throws CancelException
     {
         String sInterpret = JOptionPane.showInputDialog("Interpret:");
-        if(sInterpret==null) throw new Exception("Abbruch");
+        if(sInterpret==null) throw new CancelException();
         return sInterpret;
     }
 
