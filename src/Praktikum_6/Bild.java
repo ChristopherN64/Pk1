@@ -18,19 +18,8 @@ public class Bild extends Medium implements Serializable {
 
 	@Override
 	public void druckeDaten(OutputStream stream) {
-		String sTemp = "ID = "+super.getId() +" "+super.getTitel() +" aufgenommen im Jahr "+super.getJahr()+" in " +this.ort+"\n";
-		if(stream instanceof PrintStream)
-		{
-			((PrintStream) stream).printf("ID = %d   %s aufgenommen im Jahr %d Ort: %s\n",super.getId(),super.getTitel(),super.getJahr(),this.ort);
-		}
-		else
-		{
-			try {
-				stream.write(sTemp.getBytes());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		PrintStream ps = new PrintStream(stream);
+		ps.printf("ID = %d   %s aufgenommen im Jahr %d Ort: %s\n",super.getId(),super.getTitel(),super.getJahr(),this.ort);
 	}
 	
 	

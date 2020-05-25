@@ -20,21 +20,12 @@ public class Audio extends Medium implements Serializable {
 	}
 
 	@Override
-	public void druckeDaten(OutputStream stream) {
-		String sTemp = "ID = "+super.getId() +"  "+super.getTitel() +" von "+this.interpert+" aus "+super.getJahr()+" Spieldauer: "+this.dauer+" sek.\n";
-		if(stream instanceof PrintStream)
-		{
-			((PrintStream) stream).printf("ID = %d   %s von %s aus Spieldauer: %d sec \n",super.getId(),super.getTitel(),this.interpert,this.dauer);
-		}
-		else
-		{
-			try {
-				stream.write(sTemp.getBytes());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+	public void druckeDaten(OutputStream stream)
+    {
+        PrintStream ps = new PrintStream(stream);
+        ps.printf("ID = %d   %s von %s aus Spieldauer: %d sec \n",super.getId(),super.getTitel(),this.interpert,this.dauer);
 	}
+
 	
 	
 
