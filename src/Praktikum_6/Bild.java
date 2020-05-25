@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Bild extends Medium implements Serializable {
+	private static final long serialVersionUID = -729034045372955690L;
 	private String ort;
 	
 	public Bild(String titel, int jahr, String ort)

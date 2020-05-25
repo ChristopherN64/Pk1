@@ -7,6 +7,7 @@ import java.util.Objects;
 
 
 public abstract class Medium implements Comparable<Medium>, Serializable {
+	private static final long serialVersionUID = -729034045372955790L;
 	private static int mediumCount =0;
 	
 	private int id=0;

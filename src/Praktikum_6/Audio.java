@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Audio extends Medium implements Serializable {
+	private static final long serialVersionUID = -729034045372955890L;
 	private String interpert;
 	private int dauer;
 	
