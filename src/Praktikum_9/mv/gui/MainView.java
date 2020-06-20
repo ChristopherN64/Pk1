@@ -15,7 +15,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
 
 public class MainView extends Application {
     private Medienverwaltung medienverwaltung;
@@ -81,14 +80,10 @@ public class MainView extends Application {
     class EventHandlerLaden implements EventHandler<ActionEvent>
     {
         public void handle(ActionEvent event) {
-            SerialisierungIO serIO = new SerialisierungIO("C:\\Users\\style\\OneDrive\\Studium\\Semester 2\\Programmierkurs 1\\Praktikum\\PraktikumProject\\src\\Praktikum_9\\MedienDatei");
             try {
-                //Liste Laden und in Medienverwaltung einsetzetn
-                medienverwaltung.setMedien((ArrayList<Medium>) serIO.laden());
-                //Das Statische Attribut der Klasse Medium der Anzahl an gespeicherten Medien neu setzten da dieses ja nicht mehr mit der neu gelesenen Liste übereinsimmt
-                Medium.setMediumCount(medienverwaltung.getMedien().size());
+                medienverwaltung.lade("C:\\Users\\style\\OneDrive\\Studium\\Semester 2\\Programmierkurs 1\\Praktikum\\PraktikumProject\\src\\Praktikum_9\\MedienDatei");
                 //Alten List view Leereren und neue geladene Liste anzeigen
-                listView.getItems().removeAll(listView.getItems());
+                listView.getItems().clear();
                 listView.getItems().addAll(medienverwaltung.getMedien());
                 medienverwaltung.zeigeMedien();
             } catch (PersistenzException e) {
@@ -101,10 +96,9 @@ public class MainView extends Application {
     {
         public void handle(ActionEvent event)
         {
-            SerialisierungIO serIO = new SerialisierungIO("C:\\Users\\style\\OneDrive\\Studium\\Semester 2\\Programmierkurs 1\\Praktikum\\PraktikumProject\\src\\Praktikum_9\\MedienDatei");
             try {
-                serIO.speichern(medienverwaltung.getMedien());
-                medienverwaltung.zeigeMedien();
+                medienverwaltung.speichern("C:\\Users\\style\\OneDrive\\Studium\\Semester 2\\Programmierkurs 1\\Praktikum\\PraktikumProject\\src\\Praktikum_9\\MedienDatei");
+                controller.showMessageView("Erfolg","Liste Erfolgreich Serialisiert und geschrieben");
             } catch (PersistenzException e) {
                 e.printStackTrace();
             }
@@ -114,29 +108,28 @@ public class MainView extends Application {
     class EventHandlerInDatei implements EventHandler<ActionEvent>
     {
         public void handle(ActionEvent event) {
-            boolean read = true;
-            while (read)
+            boolean readFilePath = true;
+            while (readFilePath)
             {
-                try
+            //Einlesen eines Pfades durch einen InputView
+                String file = controller.showInputView("Pfadeingabe","Bitte geben sie den Pfad der Datei ein in die Geschrieben werden soll!","C:\\Users\\style\\OneDrive\\Studium\\Semester 2\\Programmierkurs 1\\Praktikum\\PraktikumProject\\src\\Praktikum_9\\out.txt");
+                //Wenn nicht Abbrechen gewählt wurde wird versucht zu schreiben
+                if(file!=null)
                 {
-                    //Einlesen eines Pfades durch einen InputView
-                    String file = controller.showInputView("Pfadeingabe","Bitte geben sie den Pfad der Datei ein in die Geschrieben werden soll!","C:\\Users\\style\\OneDrive\\Studium\\Semester 2\\Programmierkurs 1\\Praktikum\\PraktikumProject\\src\\Praktikum_9\\out.txt");
-                    //Wenn nicht Abbrechen gewählt wurde wird versucht zu schreiben
-                    if(file!=null)
-                    {
-                        //Speichern der Medienliste in den eingelesenen Pfad
-                        InDateiIO inDateiIO = new InDateiIO(file);
-                        inDateiIO.speichern(medienverwaltung.getMedien());
-                        controller.showMessageView("Erfolgreich","Liste erfolgreich in Datei: "+file+" geschrieben!");
+                        try {
+                            medienverwaltung.speichernInDatei(file);
+                            readFilePath=false;
+                            controller.showMessageView("Erfolg","Liste Erfolgreich in Datei geschrieben");
+                        } catch (PersistenzException e) {
+                            controller.showMessageView("Fehler","Der angegebe Pfad ist ungültig");
+                        }
                     }
-                    break;
+                else
+                {
+                    System.out.println("Abbruch");
+                    readFilePath = false;
                 }
-                catch (PersistenzException e) {
 
-                    System.out.println("Fehler: "+e.getMessage());
-                    controller.showMessageView("Fehler","Der angegebe Pfad ist ungültig");
-                    e.printStackTrace();
-                }
             }
 
         }

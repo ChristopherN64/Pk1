@@ -2,6 +2,11 @@ package Praktikum_9.mv.fachlogik;
 
 import Praktikum_9.Exceptions.CancelException;
 import Praktikum_9.Exceptions.EmptyFilenameException;
+import Praktikum_9.mv.Datenhaltung.IDao;
+import Praktikum_9.mv.Datenhaltung.InDateiIO;
+import Praktikum_9.mv.Datenhaltung.PersistenzException;
+import Praktikum_9.mv.Datenhaltung.SerialisierungIO;
+import com.sun.xml.internal.bind.v2.model.core.ID;
 import javafx.collections.FXCollections;
 
 import javax.swing.*;
@@ -15,6 +20,7 @@ public class Medienverwaltung {
 
     private ArrayList<Medium> medien;
     private static final String file = "C:\\Users\\style\\OneDrive\\Studium\\Semester 2\\Programmierkurs 1\\Praktikum\\PraktikumProject\\src\\Praktikum_9\\MedienDatei";
+    private IDao datenIO;
 
     public Medienverwaltung()
     {
@@ -63,25 +69,27 @@ public class Medienverwaltung {
         }
     }
 
-    public File readFile() throws EmptyFilenameException, CancelException, Exception
+    public void speichern(String file) throws PersistenzException
     {
-        String sDatei = JOptionPane.showInputDialog("Bitte geben sie den Pfad für die Datei an!");
-        if(sDatei==null)
-        {
-            throw new CancelException("Abbruch");
-        }
-        else if(sDatei.isEmpty())
-        {
-            throw new EmptyFilenameException("Leerer File Name");
-        }
-        File file = new File(sDatei);
-        if(file.isFile())
-        {
-            return file;
-        }
-        else throw new Exception("Fehler beim zugriff auf File");
+        datenIO = new SerialisierungIO(file);
+        datenIO.speichern(this.getMedien());
+        this.zeigeMedien();
+    }
+    public void speichernInDatei(String file) throws PersistenzException
+    {
+        datenIO = new InDateiIO(file);
+        datenIO.speichern(this.getMedien());
+        this.zeigeMedien();
     }
 
+    public void lade(String file) throws PersistenzException
+    {
+        SerialisierungIO serIO = new SerialisierungIO(file);
+        //Liste Laden und in Medienverwaltung einsetzetn
+        this.setMedien((ArrayList<Medium>) serIO.laden());
+        //Das Statische Attribut der Klasse Medium der Anzahl an gespeicherten Medien neu setzten da dieses ja nicht mehr mit der neu gelesenen Liste übereinsimmt
+        Medium.setMediumCount(this.getMedien().size());
+    }
 
     public List<Medium> getMedien() {
         return medien;
@@ -90,7 +98,6 @@ public class Medienverwaltung {
     public void setMedien(ArrayList<Medium> medien) {
         this.medien = medien;
     }
-
 
     public Iterator<Medium> iterator()
     {
