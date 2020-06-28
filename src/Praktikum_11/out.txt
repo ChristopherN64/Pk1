@@ -1,0 +1,5 @@
+ID = 0   TestAudio von Ich aus Spieldauer: 333 sec 
+ID = 1   TestAudio2 von Ich aus Spieldauer: 444 sec 
+ID = 2   testBild2 aufgenommen im Jahr 2011 Ort: Wald
+ID = 3   testBild aufgenommen im Jahr 1999 Ort: Wald
+ID = 4   sfsdfsd von gggggggggggggg aus Spieldauer: 0 sec 
