@@ -1,20 +1,20 @@
-package Praktikum_9.mv.fachlogik;
+package Praktikum_12.mv.fachlogik;
 
-import Praktikum_9.mv.Datenhaltung.IDao;
-import Praktikum_9.mv.Datenhaltung.InDateiIO;
-import Praktikum_9.mv.Datenhaltung.PersistenzException;
-import Praktikum_9.mv.Datenhaltung.SerialisierungIO;
+import Praktikum_12.mv.Datenhaltung.IDao;
+import Praktikum_12.mv.Datenhaltung.InDateiIO;
+import Praktikum_12.mv.Datenhaltung.PersistenzException;
+import Praktikum_12.mv.Datenhaltung.SerialisierungIO;
 
+import java.io.OutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.DoubleStream;
+import java.util.stream.Stream;
 
 public class Medienverwaltung {
 
     private ArrayList<Medium> medien;
-    private static final String file = "C:\\Users\\style\\OneDrive\\Studium\\Semester 2\\Programmierkurs 1\\Praktikum\\PraktikumProject\\src\\Praktikum_9\\MedienDatei";
+    private static final String file = "C:\\Users\\style\\OneDrive\\Studium\\Semester 2\\Programmierkurs 1\\Praktikum\\PraktikumProject\\src\\Praktikum_11\\MedienDatei";
     private IDao datenIO;
 
     public Medienverwaltung()
@@ -31,19 +31,15 @@ public class Medienverwaltung {
         medien.add(m);
     }
 
-    public void zeigeMedien() {
+    public void zeigeMedien(OutputStream stream) {
         //Ausgeben aller Medien im medien array über den Standard System.out
-            for (Medium mTemp : medien)
-            {
-                mTemp.druckeDaten(new PrintStream(System.out));
-            }
+        medien.forEach((mTemp)->mTemp.druckeDaten(new PrintStream(stream)));
     }
 
 
     public Medium sucheNeuesMedium()
     {
-        Collections.sort(medien);
-        return medien.get(medien.size()-1);
+        return medien.stream().sorted(Medium::compareTo).findFirst().get();
     }
 
     public double berechneErscheinungsjahr()
@@ -54,13 +50,7 @@ public class Medienverwaltung {
         }
         else
         {
-            double dSumme=0;
-            for(Medium o : medien)
-            {
-                dSumme+=o.getJahr();
-            }
-            dSumme/=medien.size();
-            return dSumme;
+            return medien.stream().mapToDouble((medium)->medium.getJahr()).average().getAsDouble();
         }
     }
 
@@ -68,13 +58,13 @@ public class Medienverwaltung {
     {
         datenIO = new SerialisierungIO(file);
         datenIO.speichern(this.getMedien());
-        this.zeigeMedien();
+        this.zeigeMedien(System.out);
     }
     public void speichernInDatei(String file) throws PersistenzException
     {
         datenIO = new InDateiIO(file);
         datenIO.speichern(this.getMedien());
-        this.zeigeMedien();
+        this.zeigeMedien(System.out);
     }
 
     public void lade(String file) throws PersistenzException

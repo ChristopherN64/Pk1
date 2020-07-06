@@ -1,8 +1,7 @@
-package Praktikum_8.mv.gui;
+package Praktikum_12.mv.gui;
 
-import Praktikum_8.mv.fachlogik.Audio;
+import Praktikum_12.mv.fachlogik.Audio;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -10,11 +9,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class AudioErfassungView extends Stage {
+public class AudioErfassungView extends ModalStage {
     private Audio erfassteAudio;
+    private int iStatus;
 
     private Stage primaryStage;
     private GridPane gp;
@@ -25,6 +24,7 @@ public class AudioErfassungView extends Stage {
 
     public AudioErfassungView(Audio audio, Stage primaryStage)
     {
+        super(primaryStage);
         this.primaryStage = primaryStage;
         //Erzeugen der Controls
          lbTitel = new Label("Titel:");
@@ -52,15 +52,28 @@ public class AudioErfassungView extends Stage {
          erfassteAudio=audio;
     }
 
-    public void showView()
+    public int showView()
     {
-        //Sich selber als Modales Fenster der Hauptstage festlegen
-        this.initOwner(primaryStage);
-        this.initModality(Modality.WINDOW_MODAL);
-
         //Konfigurieren der Controls
         tfTitel.setMinWidth(250);
-        btNeu.setOnAction(new ButtonNewHandler());
+        btNeu.setOnAction((ActionEvent event)->{
+            erfassteAudio.setTitel(tfTitel.getText());
+            erfassteAudio.setInterpert(tfInterpret.getText());
+            try{
+                erfassteAudio.setJahr(Integer.valueOf(tfJahr.getText()));
+                erfassteAudio.setDauer(Integer.valueOf(tfDauer.getText()));
+                iStatus=1;
+            }
+            catch (NumberFormatException e)
+            {
+                iStatus=-1;
+            }
+            close();
+        });
+        btAbbrechen.setOnAction((ActionEvent event)->{
+            iStatus=0;
+            close();
+        });
 
 
         //Hinzufügen der Controls zum Grid layout
@@ -92,17 +105,37 @@ public class AudioErfassungView extends Stage {
         //Scene der Stage (von sich selber) setzen
         scene = new Scene(gp);
         this.setScene(scene);
-        this.show();
+        this.showAndWait();
+        return iStatus;
     }
 
 
-    class ButtonNewHandler implements EventHandler<ActionEvent> {
+    /*
+    class ButtonNewHandler implements EventHandler<ActionEvent>  {
         @Override
-        public void handle(ActionEvent event) {
+        public void handle(ActionEvent event ) {
             erfassteAudio.setTitel(tfTitel.getText());
             erfassteAudio.setInterpert(tfInterpret.getText());
-            erfassteAudio.setJahr(Integer.valueOf(tfJahr.getText()));
-            erfassteAudio.setDauer(Integer.valueOf(tfDauer.getText()));
+            try{
+                erfassteAudio.setJahr(Integer.valueOf(tfJahr.getText()));
+                erfassteAudio.setDauer(Integer.valueOf(tfDauer.getText()));
+                iStatus=1;
+            }
+            catch (NumberFormatException e)
+            {
+                iStatus=-1;
+            }
+            close();
         }
     }
+
+    class ButtonAbbruchHandler implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent event) {
+            iStatus=0;
+            close();
+        }
+    }
+
+     */
 }

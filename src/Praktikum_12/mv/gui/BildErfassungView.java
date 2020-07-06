@@ -1,8 +1,7 @@
-package Praktikum_8.mv.gui;
+package Praktikum_12.mv.gui;
 
-import Praktikum_8.mv.fachlogik.Bild;
+import Praktikum_12.mv.fachlogik.Bild;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -10,11 +9,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class BildErfassungView extends Stage {
+public class BildErfassungView extends ModalStage {
     private Bild erfasstesBild;
+    private int iStatus;
 
     private Stage primaryStage;
     private GridPane gp;
@@ -25,6 +24,7 @@ public class BildErfassungView extends Stage {
 
     public BildErfassungView(Bild bild, Stage primaryStage)
     {
+        super(primaryStage);
         this.primaryStage = primaryStage;
         //Erzeugen der Controls
         lbTitel = new Label("Titel:");
@@ -48,16 +48,29 @@ public class BildErfassungView extends Stage {
        erfasstesBild=bild;
     }
 
-    public void showView()
+    public int showView()
     {
-        //Sich selber als Modales Fenster der Hauptstage festlegen
-        this.initOwner(primaryStage);
-        this.initModality(Modality.WINDOW_MODAL);
-
 
         //Konfigurieren der Controlls
         tfTitel.setMinWidth(250);
-        btNeu.setOnAction(new ButtonNewHandler());
+        btNeu.setOnAction((ActionEvent event)->{
+            erfasstesBild.setTitel(tfTitel.getText());
+            erfasstesBild.setOrt(tfOrt.getText());
+            try
+            {
+                erfasstesBild.setJahr(Integer.valueOf(tfJahr.getText()));
+                iStatus=1;
+            }
+            catch (NumberFormatException e)
+            {
+                iStatus=-1;
+            }
+            close();
+        });
+        btAbbrechen.setOnAction((ActionEvent event)->{
+            iStatus = 0;
+            close();
+        });
 
         //Hinzufügen der Controls zum Grid layout
         gp = new GridPane();
@@ -83,17 +96,37 @@ public class BildErfassungView extends Stage {
         //Scene der Stage (von sich selber) setzen
         scene = new Scene(gp);
         this.setScene(scene);
-        this.show();
+        this.showAndWait();
+        return iStatus;
     }
 
 
-
+/*
     class ButtonNewHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event) {
             erfasstesBild.setTitel(tfTitel.getText());
             erfasstesBild.setOrt(tfOrt.getText());
-            erfasstesBild.setJahr(Integer.valueOf(tfJahr.getText()));
+            try
+            {
+                erfasstesBild.setJahr(Integer.valueOf(tfJahr.getText()));
+                iStatus=1;
+            }
+            catch (NumberFormatException e)
+            {
+                iStatus=-1;
+            }
+            close();
         }
     }
+
+    class ButtonAbbruchHandler implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent event) {
+            iStatus = 0;
+            close();
+        }
+    }
+
+ */
 }
